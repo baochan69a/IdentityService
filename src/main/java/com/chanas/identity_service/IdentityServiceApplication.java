@@ -1,13 +1,13 @@
-package com.chanas.hello_spring_boot;
+package com.chanas.identity_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HelloSpringBootApplication {
+public class IdentityServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HelloSpringBootApplication.class, args);
+		SpringApplication.run(IdentityServiceApplication.class, args);
 	}
 
 }
