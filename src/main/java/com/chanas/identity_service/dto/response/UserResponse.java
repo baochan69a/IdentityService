@@ -1,6 +1,5 @@
-package com.chanas.identity_service.dto.request;
+package com.chanas.identity_service.dto.response;
 
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,11 +10,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserCreationRequest {
-    @Size(min = 3, message = "USERNAME_INVALID")
+public class UserResponse {
+    String id;
     String username;
-
-    @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
     String firstname;
     String lastname;
