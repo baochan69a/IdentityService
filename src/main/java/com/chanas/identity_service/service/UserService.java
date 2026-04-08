@@ -74,6 +74,7 @@ public class UserService {
                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
    }
 
+
    public UserResponse getMyInfo(){
        var context = SecurityContextHolder.getContext();
        String name = context.getAuthentication().getName();
