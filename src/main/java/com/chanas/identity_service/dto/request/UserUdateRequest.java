@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -12,9 +13,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUdateRequest {
-    @Size(min = 8, message = "INVALID_PASSWORD")
+//    @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
     String firstname;
     String lastname;
     LocalDate dob;
+    List<String> roles;
 }

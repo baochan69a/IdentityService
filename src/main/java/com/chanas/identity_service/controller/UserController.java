@@ -39,12 +39,14 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasAllAuthorities('APPROVE_POST')")
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers(){
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         log.info("Username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
+        authentication.getAuthorities().forEach(grantedAuthority ->
+                log.info(grantedAuthority.getAuthority()));
 
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())
