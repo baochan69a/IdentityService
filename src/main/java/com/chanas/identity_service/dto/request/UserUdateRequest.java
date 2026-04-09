@@ -1,5 +1,6 @@
 package com.chanas.identity_service.dto.request;
 
+import com.chanas.identity_service.validator.DobConstraint;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,6 +18,9 @@ public class UserUdateRequest {
     String password;
     String firstname;
     String lastname;
+
+    @DobConstraint(message = "INVALID_DOB", min = 18)
     LocalDate dob;
+    
     List<String> roles;
 }
