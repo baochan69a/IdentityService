@@ -1,8 +1,6 @@
 package com.chanas.identity_service.controller;
 
-import com.chanas.identity_service.dto.request.ApiResponse;
-import com.chanas.identity_service.dto.request.AuthenticationRequest;
-import com.chanas.identity_service.dto.request.IntrospectRequest;
+import com.chanas.identity_service.dto.request.*;
 import com.chanas.identity_service.dto.response.AuthenticationResponse;
 import com.chanas.identity_service.dto.response.IntrospectResponse;
 import com.chanas.identity_service.service.AuthenticationService;
@@ -37,6 +35,21 @@ public class AuthenticationController {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
                 .result(result)
+                .build();
+    }
+
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
                 .build();
     }
 
