@@ -6,13 +6,12 @@ import com.chanas.identity_service.repository.InvalidatedTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtException;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Component
@@ -36,6 +35,12 @@ public class CustomJwtDecoder implements JwtDecoder {
                     .withSecretKey(secretKeySpec)
                     .macAlgorithm(MacAlgorithm.HS512)
                     .build();
+
+            // --- BỔ SUNG ĐOẠN NÀY ĐỂ TẮT CLOCK SKEW ---
+            // Set độ du di thời gian về 0 giây (hết hạn là chết luôn)
+            JwtTimestampValidator jwtTimestampValidator = new JwtTimestampValidator(Duration.of(0, ChronoUnit.SECONDS));
+            nimbusJwtDecoder.setJwtValidator(jwtTimestampValidator);
+            // ------------------------------------------
         }
 
         try {
