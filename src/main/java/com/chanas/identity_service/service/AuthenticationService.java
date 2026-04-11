@@ -3,6 +3,7 @@ package com.chanas.identity_service.service;
 import com.chanas.identity_service.dto.request.AuthenticationRequest;
 import com.chanas.identity_service.dto.request.IntrospectRequest;
 import com.chanas.identity_service.dto.request.LogoutRequest;
+import com.chanas.identity_service.dto.request.RefreshRequest;
 import com.chanas.identity_service.dto.response.AuthenticationResponse;
 import com.chanas.identity_service.dto.response.IntrospectResponse;
 import com.chanas.identity_service.entity.InvalidatedToken;
@@ -80,7 +81,7 @@ public class AuthenticationService {
 
         return AuthenticationResponse.builder()
                 .token(token)
-                .authenticated(authenticated)
+                .authenticated(true)
                 .build();
 
     }
@@ -97,6 +98,33 @@ public class AuthenticationService {
                 .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
+    }
+
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken());
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+        var expirytime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expirytime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+
+        var user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.UNAUTHENTICATED)
+        );
+
+        var token = generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .build();
     }
 
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
