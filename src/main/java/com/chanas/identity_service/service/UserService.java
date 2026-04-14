@@ -3,8 +3,8 @@ package com.chanas.identity_service.service;
 import com.chanas.identity_service.dto.request.UserCreationRequest;
 import com.chanas.identity_service.dto.request.UserUdateRequest;
 import com.chanas.identity_service.dto.response.UserResponse;
+import com.chanas.identity_service.entity.Role;
 import com.chanas.identity_service.entity.User;
-import com.chanas.identity_service.enums.Role;
 import com.chanas.identity_service.exception.AppException;
 import com.chanas.identity_service.exception.ErrorCode;
 import com.chanas.identity_service.mapper.UserMapper;
@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -39,10 +40,12 @@ public class UserService {
        User user = userMapper.toUser(request);
        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-       HashSet<String> roles = new HashSet<>();
-       roles.add(Role.USER.name());
+       HashSet<String> defaultRoles = new HashSet<>();
+       defaultRoles.add("USER");
 
-//       user.setRoles(roles);
+       var roles = roleRepository.findAllById(defaultRoles);
+
+       user.setRoles(new HashSet<>(roles));
 
        return userMapper.toUserResponse(userRepository.save(user));
    }
