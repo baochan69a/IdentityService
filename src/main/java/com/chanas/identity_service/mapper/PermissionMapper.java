@@ -1,17 +1,14 @@
 package com.chanas.identity_service.mapper;
 
-import com.chanas.identity_service.dto.request.PermissionRequest;
-import com.chanas.identity_service.dto.request.UserCreationRequest;
-import com.chanas.identity_service.dto.request.UserUdateRequest;
-import com.chanas.identity_service.dto.response.PermissionResponse;
-import com.chanas.identity_service.dto.response.UserResponse;
-import com.chanas.identity_service.entity.Permission;
-import com.chanas.identity_service.entity.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+
+import com.chanas.identity_service.dto.request.PermissionRequest;
+import com.chanas.identity_service.dto.response.PermissionResponse;
+import com.chanas.identity_service.entity.Permission;
 
 @Mapper(componentModel = "spring")
 public interface PermissionMapper {
     Permission toPermission(PermissionRequest request);
+
     PermissionResponse toPermissionResponse(Permission permission);
 }
